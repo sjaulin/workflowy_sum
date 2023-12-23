@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Mon Extension DOM",
+    "version": "1.0",
+    "description": "Modifie le DOM d'une page web",
+    "permissions": [
+        "activeTab"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
+}
