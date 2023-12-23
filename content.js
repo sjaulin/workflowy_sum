@@ -19,7 +19,7 @@ function handlePageClick(event) {
         childProjectDivs.forEach((childProjectDiv) => {
           // Rechercher la présence d'un chiffre numérique suivi de la lettre "g"
           const text = childProjectDiv.textContent;
-          const matches = text.match(/(\d+)g/g);
+          const matches = text.match(/sum:(\d+)/);
   
           // Si des correspondances sont trouvées, ajouter les valeurs à la somme
           if (matches) {
@@ -47,7 +47,7 @@ function handlePageClick(event) {
             );
           } else {
             // Ajouter "Total: " suivi de la somme à la fin du contenu
-            innerContentContainer.textContent = content + " Total:" + sum + "g";
+            innerContentContainer.textContent = content + " Total:" + sum;
           }
         }
       }
