@@ -1,25 +1,24 @@
 // Fonction pour effectuer les actions lorsque la page est cliquée
 function handlePageClick(event) {
-  // Explorer le DOM à la recherche de toutes les div avec une classe "project"
-  const projectDivs = document.querySelectorAll(".project:not(.root)");
+  // Rechercher toutes les div avec la classe "project" mais sans la classe "root"
+  const projects = document.querySelectorAll(".project:not(.root)");
 
   // Parcourir chaque div "project"
-  projectDivs.forEach((projectDiv) => {
+  projects.forEach((project) => {
     // Rechercher à l'intérieur la présence d'une div avec la classe "children"
-    const childrenDiv = projectDiv.querySelector(".children");
+    const children = project.querySelector(".children");
 
     // Si la div "project" a au moins une div "children", la considérer comme un "parent"
-    if (childrenDiv) {
+    if (children) {
       // Parcourir toutes les div contenues dans la div "children"
-      const childProjectDivs =
-        childrenDiv.querySelectorAll(":scope > .project");
+      const childProjects = children.querySelectorAll(":scope > .project");
 
       let sum = 0;
 
       // Pour chaque div "project" dans la div "children"
-      childProjectDivs.forEach((childProjectDiv) => {
+      childProjects.forEach((childProject) => {
         // Rechercher la présence d'un chiffre numérique suivi de la lettre "g"
-        const text = childProjectDiv.textContent;
+        const text = childProject.textContent;
         const matches = text.match(/sum:(\d+)/);
 
         // Si des correspondances sont trouvées, ajouter les valeurs à la somme
@@ -32,24 +31,26 @@ function handlePageClick(event) {
           });
         }
       });
+      // Rechercher un span avec la classe "innerContentContainer"
+      const contentContainer = project.querySelector(".content");
 
-      // Afficher la somme dans la div parent
-      const innerContentContainer = projectDiv.querySelector(
-        ".innerContentContainer"
-      );
-
-      if (innerContentContainer) {
-        const content = innerContentContainer.textContent;
-        if (content.includes("sum:")) {
-          // Remplacer le nombre numérique existant par la somme
-          innerContentContainer.textContent = content.replace(
-            /sum:\s*\d+/i,
-            "sum:" + sum
-          );
-        } else {
-          // Ajouter "sum: " suivi de la somme à la fin du contenu
-          innerContentContainer.textContent = content + " sum:" + sum;
+      if (contentContainer) {
+        // Vérifier s'il existe déjà un span avec la classe "addon_sum" et le supprimer le cas échéant
+        const existingAddonSum = project.querySelector(".addon_sum");
+        if (existingAddonSum) {
+          existingAddonSum.remove();
         }
+
+        // Créer un nouveau span avec la classe "addon_sum"
+        const addonSumSpan = document.createElement("span");
+        addonSumSpan.className = "addon_sum";
+        addonSumSpan.textContent = ` Total: ${sum}`;
+
+        // Insérer le nouveau span après innerContentContainer
+        contentContainer.insertAdjacentElement("afterend", addonSumSpan);
+
+        // Ajouter la classe "addon_sum" au div de class "content"
+        contentContainer.classList.add("addon_sum");
       }
     }
   });
@@ -57,3 +58,5 @@ function handlePageClick(event) {
 
 // Ajouter un gestionnaire d'événements de clic à la page entière
 document.addEventListener("click", handlePageClick);
+// Appeler la fonction une première fois pour traiter le DOM initial
+handlePageClick();
